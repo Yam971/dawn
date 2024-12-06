@@ -1,0 +1,675 @@
+<div class="personalize-header">
+  <span class="header-title">When You Were Born</span>
+  <button class="header-close" id="close-button">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"></path>
+    </svg>
+  </button>
+</div>
+
+
+
+<div class="personalize-form-section">
+  <div class="personalize-form-container">
+    <h2 class="step-title">Step 1 of 3</h2>
+    <h3 class="subtitle">Who are you making this book for?</h3>
+
+     <form id="personalization-form">
+      <!-- First Name Field with Autocomplete and Validation Icon -->
+      <label for="child-name" class="label">First name</label>
+      <div class="autocomplete" style="width:100%; position: relative;">
+        <input type="text" name="properties[Child's Name]" id="child-name" class="input-field" required>
+        <span id="name-validation-icon" class="validation-icon"></span>
+      </div>
+
+      <!-- Gender Selection -->
+      <label class="label">Choose their character</label>
+      <div class="gender-selection">
+        <button type="button" id="boy" class="gender-btn">Boy</button>
+        <button type="button" id="girl" class="gender-btn">Girl</button>
+      </div>
+
+      <!-- Character Selection (Use images as buttons) -->
+      <div class="character-selection-grid">
+        <!-- Character Options -->
+        <div class="character-option" data-character="1">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-i.png?v=1726262637" alt="Character 1" class="character-img">
+      </div>
+      <div class="character-option" data-character="2">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-ii.png?v=1726314190" alt="Character 2" class="character-img">
+      </div>
+      <div class="character-option" data-character="3">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-iii.png?v=1726314190" alt="Character 3" class="character-img">
+      </div>
+      <div class="character-option" data-character="4">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-iv.png?v=1726314190" alt="Character 4" class="character-img">
+      </div>
+      <div class="character-option" data-character="5">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-v.png?v=1726314190" alt="Character 5" class="character-img">
+      </div>
+      <div class="character-option" data-character="6">
+        <img src="https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-vi.png?v=1726314190" alt="Character 6" class="character-img">
+      </div>
+        <!-- Repeat for other characters... -->
+      </div>
+
+      <!-- Hidden fields to capture product and variant IDs -->
+      <input type="hidden" name="id" id="variant-id">
+      <input type="hidden" name="properties[Product ID]" id="product-id">
+      <input type="hidden" name="properties[Character]" id="character-id">
+      <input type="hidden" name="properties[Gender]" id="gender-id">
+
+      <!-- Continue Button -->
+      <button type="submit" class="continue-btn">Continue</button>
+      <br>
+
+      <!-- Back to product page link -->
+      <a id="back-to-product-link" class="back-to-product-page">← Back to the product page</a>
+    </form>
+
+      
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- JavaScript Code -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Fetch the list of names for autocomplete
+    fetch('https://cdn.shopify.com/s/files/1/0897/8219/0386/files/list-top2k-2013.json?v=1727130588')
+      .then(response => response.json())
+      .then(data => {
+        const namesList = data.names;
+        autocomplete(document.getElementById('child-name'), namesList);
+      })
+      .catch(error => console.error('Error fetching names:', error));
+
+    function autocomplete(inp, arr) {
+      var currentFocus;
+
+      inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        closeAllLists();
+        if (!val) {
+          validateInput(inp, arr);
+          return false;
+        }
+        currentFocus = -1;
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a);
+        var valUpper = val.toUpperCase();
+
+        var exactMatches = [];
+        var startsWithMatches = [];
+        var containsMatches = [];
+
+        for (i = 0; i < arr.length; i++) {
+          var name = arr[i];
+          var nameUpper = name.toUpperCase();
+
+          if (nameUpper === valUpper) {
+            exactMatches.push(name);
+          } else if (nameUpper.startsWith(valUpper)) {
+            startsWithMatches.push(name);
+          } else if (nameUpper.includes(valUpper)) {
+            containsMatches.push(name);
+          }
+        }
+
+        var suggestionList = exactMatches.concat(startsWithMatches, containsMatches);
+        var maxSuggestions = 10;
+        suggestionList = suggestionList.slice(0, maxSuggestions);
+
+        suggestionList.forEach(function(suggestion) {
+          b = document.createElement("DIV");
+          var nameUpper = suggestion.toUpperCase();
+          var matchIndex = nameUpper.indexOf(valUpper);
+          b.innerHTML = suggestion.substr(0, matchIndex) + "<strong>" + suggestion.substr(matchIndex, val.length) + "</strong>" + suggestion.substr(matchIndex + val.length);
+          b.innerHTML += "<input type='hidden' value='" + suggestion + "'>";
+          b.addEventListener("click", function(e) {
+            inp.value = this.getElementsByTagName("input")[0].value;
+            closeAllLists();
+            validateInput(inp, arr);
+          });
+          a.appendChild(b);
+        });
+
+        validateInput(inp, arr);
+      });
+
+      inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+
+        if (e.keyCode == 40) {
+          currentFocus++;
+          addActive(x);
+        } else if (e.keyCode == 38) {
+          currentFocus--;
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          e.preventDefault();
+          if (currentFocus > -1) {
+            if (x) {
+              x[currentFocus].click();
+            }
+          }
+        }
+      });
+
+      function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+
+      function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+
+      function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            if (x[i] && x[i].parentNode) {
+              x[i].parentNode.removeChild(x[i]);
+            }
+          }
+        }
+      }
+
+      document.addEventListener("click", function(e) {
+        closeAllLists(e.target);
+      });
+
+      function validateInput(inp, arr) {
+        const icon = document.getElementById('name-validation-icon');
+        const inputValue = inp.value.trim().toLowerCase();
+        const lowerCaseArr = arr.map(name => name.toLowerCase());
+
+        if (inputValue === '') {
+          icon.classList.remove('valid', 'invalid');
+          icon.innerHTML = '';
+        } else if (lowerCaseArr.includes(inputValue)) {
+          icon.classList.remove('invalid');
+          icon.classList.add('valid');
+          icon.innerHTML = '&#10004;';
+        } else {
+          icon.classList.remove('valid');
+          icon.classList.add('invalid');
+          icon.innerHTML = '&#10006;';
+        }
+      }
+
+      // Updated Submit Handler for Redirection
+      const form = document.getElementById('personalization-form');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const childName = document.getElementById('child-name').value.trim();
+        const gender = document.getElementById('gender-id').value;
+        const character = document.getElementById('character-id').value;
+        const productId = document.getElementById('product-id').value;
+        const variantId = document.getElementById('variant-id').value;
+
+        // Validation
+        if (childName === '') {
+          alert('Please enter a first name.');
+          return;
+        }
+
+        // Additional validation can be added here if necessary
+
+        // Get URL parameters for handle
+        const urlParams = new URLSearchParams(window.location.search);
+        const handle = urlParams.get('handle');
+
+        // Construct URL parameters
+        const params = new URLSearchParams({
+          child_name: childName,
+          gender: gender,
+          character: character,
+          product_id: productId,
+          variant_id: variantId,
+          handle: handle
+        });
+
+        // Redirect to the preview page with URL parameters
+        window.location.href = '/pages/preview?' + params.toString();
+      });
+
+    }
+
+    // Existing JavaScript for other functionalities
+
+    // Get URL parameters for product_id and variant_id
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product_id');
+    const variantId = urlParams.get('variant_id');
+
+    // Ensure variantId is set in the hidden input field
+    if (variantId) {
+      document.getElementById('variant-id').value = variantId;
+    } else {
+      console.error("Variant ID not found in URL parameters.");
+    }
+
+    // Ensure productId is set in the hidden input field
+if (productId) {
+  document.getElementById('product-id').value = productId;
+} else {
+  console.error("Product ID not found in URL parameters.");
+}
+
+
+
+    
+
+    // Arrays of boy and girl character images
+    const boyCharacters = [
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-i.png?v=1726262637",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-ii.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-iii.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-iv.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-v.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/boy_type-vi.png?v=1726314190"
+    ];
+
+    const girlCharacters = [
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-i.png?v=1726262637",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-ii.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-iii.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-iv.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-v.png?v=1726314190",
+      "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/girl_type-vi.png?v=1726314190"
+    ];
+
+    // Select DOM elements
+    var boyButton = document.getElementById('boy');
+    var girlButton = document.getElementById('girl');
+    var genderInput = document.getElementById('gender-id');
+    var characterImages = document.querySelectorAll('.character-img');
+
+    // Function to update character images
+    function updateCharacterImages(characterArray) {
+      characterImages.forEach(function(img, index) {
+        img.src = characterArray[index];
+      });
+    }
+
+    // Gender Selection Logic for Boy Button
+    boyButton.addEventListener('click', function() {
+      boyButton.classList.add('active');
+      boyButton.style.backgroundColor = '#1e5751'; // Green color for active
+      boyButton.style.color = '#fff'; // White text
+
+      girlButton.classList.remove('active');
+      girlButton.style.backgroundColor = '#fdf8f1'; // Reset Girl button background
+      girlButton.style.color = '#23231e'; // Reset Girl button text color
+
+      genderInput.value = 'Boy'; // Update hidden input for gender
+      updateCharacterImages(boyCharacters); // Update character images to boy set
+    });
+
+    // Gender Selection Logic for Girl Button
+    girlButton.addEventListener('click', function() {
+      girlButton.classList.add('active');
+      girlButton.style.backgroundColor = '#1e5751'; // Green color for active
+      girlButton.style.color = '#fff'; // White text
+
+      boyButton.classList.remove('active');
+      boyButton.style.backgroundColor = '#fdf8f1'; // Reset Boy button background
+      boyButton.style.color = '#23231e'; // Reset Boy button text color
+
+      genderInput.value = 'Girl'; // Update hidden input for gender
+      updateCharacterImages(girlCharacters); // Update character images to girl set
+    });
+
+    // Character Selection Logic
+    var characterOptions = document.querySelectorAll('.character-option');
+    var characterInput = document.getElementById('character-id');
+
+    characterOptions.forEach(function(option) {
+      option.addEventListener('click', function() {
+        // Reset border for all options
+        characterOptions.forEach(function(opt) {
+          opt.classList.remove('selected');
+          opt.style.borderColor = '#bdbdbb'; // Reset border color
+        });
+        // Add 'selected' class to the clicked option
+        option.classList.add('selected');
+        characterInput.value = option.getAttribute('data-character'); // Set hidden input with selected character
+
+        // Set green border for the selected option
+        option.style.borderColor = '#1e5751'; // Set selected border color
+      });
+    });
+
+    // JavaScript for handling dynamic redirection of the 'X' button and 'Back to product page' link
+    const productHandle = urlParams.get('handle');
+
+    // Set the close button redirect URL
+    const closeButton = document.getElementById('close-button');
+    const backLink = document.getElementById('back-to-product-link');
+
+    if (productHandle && variantId) {
+      const productUrl = `/products/${productHandle}?variant=${variantId}`;
+      closeButton.onclick = function() {
+        window.location.href = productUrl;
+      };
+      backLink.href = productUrl;
+    } else if (productHandle) {
+      const productUrl = `/products/${productHandle}`;
+      closeButton.onclick = function() {
+        window.location.href = productUrl;
+      };
+      backLink.href = productUrl;
+    } else {
+      const defaultUrl = '/';
+      closeButton.onclick = function() {
+        window.location.href = defaultUrl;
+      };
+      backLink.href = defaultUrl;
+    }
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- CSS for the form page -->
+<style>
+  .personalize-form-container {
+    background-color: #fdf8f1;
+    padding: 16px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step-title, .subtitle {
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: #23231e;
+  }
+
+  .step-title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+  }
+
+  .label {
+    font-size: 1.4rem;
+    color: #23231e;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .input-field {
+    width: 100%;
+    max-width: 544px;
+    padding: 1.3rem;
+    border: 2px solid #bdbdbb;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 1.6rem;
+  }
+
+  .gender-selection {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 16px;
+    width: 544px;
+  }
+
+  .gender-btn {
+    padding: 8px 16px;
+    font-size: 1.7rem;
+    background-color: #fdf8f1;
+    border: 2px solid #bdbdbb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .gender-btn.active {
+    border-color: #1e5751;
+    background-color: #1e5751;
+    color: #fff;
+  }
+
+  .character-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+    max-width: 544px;
+    width: 100%;
+  }
+
+.character-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #bdbdbb;
+  padding: 8px;
+  transition: all 0.2s ease;
+}
+
+  .character-option:hover {
+    border-color: #1e5751;
+  }
+
+.character-option.selected {
+  outline: 3px solid #1e5751; /* Add green outline */
+}
+
+  .character-img {
+    width: 148px;
+    height: auto;
+  }
+
+  .continue-btn {
+    background-color: #23231E;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .continue-btn:hover {
+    background-color: #14473d;
+  }
+
+  .back-to-product-page {
+  color: #7b7b78;
+  margin-top: 16px; /* Space between the continue button and the link */
+  margin-bottom: 24px; /* Space below the link */
+  font-size: 1.7rem;
+  text-decoration: none; /* Remove the underline */
+  display: block; /* Ensure the link is treated as a block element for centering */
+  text-align: center; /* Center the link under the continue button */
+    
+  }
+
+  .back-to-product-page:hover {
+    text-decoration: none;
+  }
+
+  @media (min-width: 48rem) {
+    .personalize-form-container {
+      max-width: 600px;
+    }
+
+    .character-selection-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gender-btn {
+      padding: 12px 20px;
+      width: 100%;
+    }
+
+    .continue-btn {
+      font-size: 1.7rem;
+      width: 544px;
+    }
+  }
+
+
+
+/* Full-width header */
+  .personalize-header {
+    width: 100%;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4.5rem; /* Approx. 48px on a MacBook Air */
+    position: relative;
+    padding: 0 1rem;
+  }
+
+  /* Centered title in the header */
+  .header-title {
+    font-size: 1.5rem;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* "X" button in the header */
+  .header-close {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5rem;
+    height: 5rem;
+  }
+
+  /* Style the SVG inside the "X" button */
+  .header-close svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* Responsive design */
+  @media (max-width: 48rem) {
+    .header-title {
+      font-size: 1.2rem;
+    }
+
+    .header-close {
+      right: 0.5rem;
+    }
+
+    .header-close svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+
+
+
+
+
+
+  
+/* Autocomplete container */
+.autocomplete {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #bdbdbb;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #bdbdbb;
+}
+
+.autocomplete-items div:hover {
+  background-color: #f1f1f1;
+}
+
+/* When navigating through the items using the arrow keys: */
+.autocomplete-active {
+  background-color: #1e5751 !important;
+  color: #ffffff;
+}
+
+/* Validation Icon Styles */
+.validation-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
+  pointer-events: none;
+}
+
+.validation-icon.valid {
+  color: green;
+}
+
+.validation-icon.invalid {
+  color: red;
+}
+
+  
+
+
+
+  
+</style>

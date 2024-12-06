@@ -1,0 +1,525 @@
+<!-- sections/preview-images.liquid -->
+
+<div class="personalize-form-section">
+  <div class="personalize-form-container" id="book-container">
+    <!-- Verification Section -->
+    <div id="verification-section" class="verification-section">
+      <button id="toggle-verification" class="toggle-verification">Hide Details</button>
+      <div id="verification-details" class="verification-details">
+        <p><strong>Child's Name:</strong> <span id="display-child-name"></span></p>
+        <p><strong>Gender:</strong> <span id="display-gender"></span></p>
+        <p><strong>Character:</strong> <span id="display-character"></span></p>
+        <p><strong>Product ID:</strong> <span id="display-product-id"></span></p>
+        <p><strong>Variant ID:</strong> <span id="display-variant-id"></span></p>
+      </div>
+    </div>
+    <!-- Book Preview Content -->
+    <div id="book-preview"></div>
+  </div>
+</div>
+
+<div class="footer-navigation">
+  <div class="navigation-container">
+    <div class="navigation-items">
+      <button class="navigation-item complete">
+        <span class="label-footnav">Adventurer</span>
+        <p class="value-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="tick">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="value">Leah</span>
+        </p>
+      </button>
+      <button class="navigation-item">
+        <span class="label-footnav">Cover color</span>
+        <p class="value-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="tick">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="value">Choose a color</span>
+        </p>
+      </button>
+      <button class="navigation-item">
+        <span class="label-footnav">Dedication</span>
+        <p class="value-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="tick">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="value">Write dedication</span>
+        </p>
+      </button>
+      <button class="navigation-item complete">
+        <span class="label-footnav">Book language</span>
+        <p class="value-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="tick">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="value">English (US)</span>
+        </p>
+      </button>
+    </div>
+    <div class="continue-button-container">
+      <button class="primary-button">Continue</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Function to parse URL parameters
+function getUrlParameters() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    child_name: params.get('child_name') || '',
+    gender: params.get('gender') || '',
+    character: params.get('character') || '',
+    product_id: params.get('product_id') || '',
+    variant_id: params.get('variant_id') || '',
+    handle: params.get('handle') || ''
+  };
+}
+
+// Function to display verification details
+function displayVerificationDetails(details) {
+  const childNameElem = document.getElementById('display-child-name');
+  const genderElem = document.getElementById('display-gender');
+  const characterElem = document.getElementById('display-character');
+  const productIdElem = document.getElementById('display-product-id');
+  const variantIdElem = document.getElementById('display-variant-id');
+
+  if (childNameElem) childNameElem.textContent = details.child_name;
+  if (genderElem) genderElem.textContent = details.gender;
+  if (characterElem) characterElem.textContent = details.character;
+  if (productIdElem) productIdElem.textContent = details.product_id;
+  if (variantIdElem) variantIdElem.textContent = details.variant_id;
+}
+
+// Function to toggle verification details visibility
+function toggleVerification() {
+  const details = document.getElementById('verification-details');
+  const toggleButton = document.getElementById('toggle-verification');
+  if (details && toggleButton) {
+    if (details.classList.contains('hidden')) {
+      details.classList.remove('hidden');
+      toggleButton.textContent = 'Hide Details';
+    } else {
+      details.classList.add('hidden');
+      toggleButton.textContent = 'Show Details';
+    }
+  }
+}
+
+// Array of image URLs in the required order
+const imageUrls = [
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/front-right.jpg?v=1726714915', // Cover
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/front-left.jpg?v=1726714914', // 2nd page left
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/welcome.jpg?v=1726714915', // 2nd page right
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/dedication-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/dedication-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/intro-first-left.jpg?v=1726714914',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/intro-first-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/intro-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/intro-second-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/lion-first-left.jpg?v=1726714915', 
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/lion-first-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/lion-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/lion-second-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/elephant-first-left.jpg?v=1726714914',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/elephant-first-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/elephant-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/elephant-second-right.jpg?v=1726714915',  
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/alpaca-first-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/alpaca-first-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/alpaca-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/alpaca-second-right.jpg?v=1726714915',
+
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/horse-first-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/horse-first-right.jpg?v=1726714915',
+
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/horse-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/horse-second-right.jpg?v=1726714915',
+    
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/outro-first-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/outro-first-right.jpg?v=1726714915',
+    
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/outro-second-left.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/outro-second-right.jpg?v=1726714915',
+    
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/marketing.jpg?v=1726714915',
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/back-left.jpg?v=1726714915',
+    
+'https://cdn.shopify.com/s/files/1/0897/8219/0386/files/back-right.jpg?v=1726714915'  // Back cover
+
+];
+
+function createPage(leftImage, rightImage, isCover = false, isBackCover = false) {
+  let html = '<div class="book">';
+  if (isCover) {
+    html += `
+      <div class="page page-right">
+        <div class="glitter"></div>
+        <img class="book-cover" src="${leftImage}" alt="Book Cover">
+        <div class="edit-cover-btn-container">
+          <button class="edit-cover-btn">Edit cover</button>
+        </div>
+      </div>`;
+  } else if (isBackCover) {
+    html += `
+      <div class="page page-left">
+        <div class="glitter"></div>
+        <img class="book-cover" src="${leftImage}" alt="Back Cover">
+      </div>`;
+  } else {
+    html += `
+      <div class="page page-left">
+        <div class="glitter"></div>
+        <img src="${leftImage}" alt="Page Left">
+      </div>
+      <div class="gutter"></div>
+      <div class="page page-right">
+        <div class="glitter"></div>
+        <img src="${rightImage}" alt="Page Right">
+      </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function populateBook() {
+  const bookPreview = document.getElementById('book-preview');
+  const totalImages = imageUrls.length;
+
+  // Clear existing content
+  bookPreview.innerHTML = '';
+
+  // Add the cover (first image)
+  bookPreview.innerHTML += createPage(imageUrls[0], null, true);
+
+  // Add the inner pages (in pairs)
+  for (let i = 1; i < totalImages - 1; i += 2) {
+    const leftImage = imageUrls[i];
+    const rightImage = imageUrls[i + 1];
+    bookPreview.innerHTML += createPage(leftImage, rightImage);
+  }
+
+  // Add the back cover (last image)
+  bookPreview.innerHTML += createPage(imageUrls[totalImages - 1], null, false, true);
+}
+
+// Initialize the preview page after DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+  const details = getUrlParameters();
+
+  // Debugging: Log the parsed parameters
+  console.log('Parsed URL Parameters:', details);
+
+  displayVerificationDetails(details);
+
+  // Attach event listener to the toggle button
+  const toggleButton = document.getElementById('toggle-verification');
+  if (toggleButton) {
+    toggleButton.addEventListener('click', toggleVerification);
+  } else {
+    console.error('Toggle button not found!');
+  }
+
+  // Populate the book preview
+  populateBook();
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  // Example: update "Adventurer" section with the child's name
+  document.querySelector(".value").textContent = "Leah"; // Example name, this can be dynamic
+
+  // Continue button action
+  document.querySelector(".primary-button").addEventListener("click", function () {
+    alert('Continue button clicked!');
+  });
+});
+
+</script>
+
+
+
+
+
+
+
+<style>
+  .personalize-preview-container {
+    background-color: #fdf8f1;
+    padding: 16px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #FAF3EC;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .book {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 600px;
+    margin: 30px 0;
+  }
+
+  .page {
+    width: 50%;
+    position: relative;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border-radius: 5px;
+  }
+
+  .page img {
+    width: 100%;
+    display: block;
+  }
+
+  .gutter {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
+  }
+
+  /* Glitter or shading effect on the page */
+  .page-left::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 255, 255, 0.1) min(20px, 3.5%), rgba(0, 0, 0, 0.04) min(42px, 7.5%), rgba(0, 0, 0, 0) min(146px, 26%));
+  }
+
+  .page-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(255, 255, 255, 0.3) min(20px, 3.5%), rgba(0, 0, 0, 0.04) min(42px, 7.5%), rgba(0, 0, 0, 0) min(146px, 26%));
+  }
+
+  /* Optional spine glitter effect */
+  .page-left::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) min(0, 0%), rgba(0, 0, 0, 0.2) min(3px, 0.64%), rgba(0, 0, 0, 0) min(6px, 1.04%), rgba(0, 0, 0, 0) min(17px, 3.7%), rgba(0, 0, 0, 0.2) min(22px, 4.77%), rgba(0, 0, 0, 0.2) min(24px, 4.99%), rgba(0, 0, 0, 0) min(31px, 6.21%));
+  }
+
+  .page-right::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.2) min(0, 0%), rgba(0, 0, 0, 0.2) min(3px, 0.64%), rgba(0, 0, 0, 0) min(6px, 1.04%), rgba(0, 0, 0, 0) min(17px, 3.7%), rgba(0, 0, 0, 0.2) min(22px, 4.77%), rgba(0, 0, 0, 0.2) min(24px, 4.99%), rgba(0, 0, 0, 0) min(31px, 6.21%));
+  }
+
+  .edit-cover-btn-container {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .edit-cover-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .edit-cover-btn:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  /* Styles for Verification Section */
+  .verification-section {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .toggle-verification {
+    background-color: #1e5751;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .toggle-verification:hover {
+    background-color: #14473d;
+  }
+
+  .verification-details {
+    background-color: #fdf8f1;
+    padding: 10px;
+    border: 1px solid #bdbdbb;
+    border-radius: 4px;
+    display: block;
+  }
+
+  .verification-details.hidden {
+    display: none;
+  }
+
+  /* Additional styles for book-preview container */
+  #book-preview {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+
+
+<style>
+.footer-navigation {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #bdbdbb;
+  z-index: 100;
+}
+
+.navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+.navigation-items {
+  display: flex;
+  gap: 12px;
+  flex-grow: 1;
+  overflow-x: auto;
+}
+
+.navigation-item {
+  background-color: #fff;
+  border: 1px solid #bdbdbb;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 13rem;
+}
+
+.navigation-item.complete {
+  border-color: #23231e;
+}
+
+.label-footnav {
+  font-weight: bold;
+  color: #23231e;
+  font-size: 1.475rem;
+}
+
+.value-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #23231e;
+}
+
+.tick {
+  width: 1.5rem;
+  color: #1e5751;
+}
+
+.primary-button {
+  background-color: #23231e;
+  color: #fff;
+  padding: 12px 40px;
+  font-size: 1.7rem;
+  border: none;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background-color: #1a1a1a;
+}
+
+.continue-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
+
+

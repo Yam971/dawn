@@ -1,0 +1,22 @@
+
+{
+    "name": "Whataread Store",
+    "short_name": "Whataread",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+      {
+        "src": "https://cdn.shopify.com/s/files/1/0897/8219/0386/files/WR-192x192.png?v=1729526537",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/path/to/your/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

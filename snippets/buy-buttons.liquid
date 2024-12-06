@@ -1,3 +1,4 @@
+
 {% comment %}
   Renders product buy-buttons.
   Accepts:
@@ -70,6 +71,21 @@
               assign quantity_rule_soldout = true
             endif
           -%}
+
+
+          
+{% if template == 'product.custom-product' %}
+ <!-- Custom Personalize my Book Button -->
+  <button
+    class="personalize-book-button button button--full-width button--primary"
+    onclick="window.location.href='/pages/personalize?handle={{ product.handle }}&product_id={{ product.id }}&variant_id={{ product.selected_or_first_available_variant.id }}';"
+  >
+    <span>
+      Personalize my book
+    </span>
+  </button>
+{% else %}
+  <!-- Default Add to Cart Button -->  
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
@@ -93,6 +109,12 @@
             </span>
             {%- render 'loading-spinner' -%}
           </button>
+          {% endif %}
+
+
+
+
+          
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}

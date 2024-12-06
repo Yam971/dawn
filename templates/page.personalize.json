@@ -1,0 +1,23 @@
+
+ {
+    "sections": {
+      "main": {
+        "type": "main-page",
+        "disabled": true,
+        "settings": {
+          "padding_top": 28,
+          "padding_bottom": 28
+        }
+      },
+      "personalize_form_section": {
+        "type": "personalize-form",
+        "custom_css": [],
+        "settings": {}
+      }
+    },
+    "order": [
+      "main",
+      "personalize_form_section"
+    ]
+  }
+  

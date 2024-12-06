@@ -28,6 +28,30 @@
 
     {% render 'meta-tags' %}
 
+
+
+
+
+<link rel="manifest" href="{{ 'manifest.json' | asset_url }}">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register("{{ 'service-worker.js' | asset_url }}")
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    });
+  }
+</script>
+
+
+
+    
+
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
@@ -307,13 +331,17 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
+    {%- unless template contains 'page.personalize' or template contains 'page.preview' -%}
     {% sections 'header-group' %}
+    {%- endunless -%}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 
+    {%- unless template contains 'page.personalize' or template contains 'page.preview' -%}
     {% sections 'footer-group' %}
+    {%- endunless -%}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
