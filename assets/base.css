@@ -76,6 +76,45 @@
 
 /* base */
 
+
+
+
+
+
+@font-face {
+    font-family: "Atak";
+    src: url('https://cdn.shopify.com/s/files/1/0897/8219/0386/files/ata-regular.woff.woff2?v=1733583792') format("woff2"),
+         url('https://cdn.shopify.com/s/files/1/0897/8219/0386/files/ata-regular.woff?v=1733583792') format("woff");
+}
+
+body {
+  font-family: var(--font-family-body, 'Atak', Arial, sans-serif);
+}
+
+@font-face {
+    font-family: "CoopMed";
+    src: url('https://cdn.shopify.com/s/files/1/0897/8219/0386/files/Coop-Med.woff2?v=1733608456') format("woff2");
+}
+
+.product__title, h1 {
+    font-family: "CoopMed", Arial, sans-serif !important;   
+}
+
+.accordion__title, h4 {
+    font-family: 'Atak', Arial, sans-serif !important;   
+}
+
+.details-icon {
+    vertical-align: middle;  
+}
+
+
+
+
+
+
+
+
 .page-width {
   max-width: var(--page-width);
   margin: 0 auto;
@@ -2130,7 +2169,7 @@ input[type='checkbox'] {
 
 /* wat */
 .utility-bar {
-  background-color: #f7bc03 !important;
+  background-color: #200363 !important;
 }
 
 
